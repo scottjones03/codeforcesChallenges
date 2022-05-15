@@ -7,7 +7,7 @@ bool isGood(void) {
     int el;
     int sum;
     for (int i=0; i<LENGTH; i++) {
-        scanf("%d", &el);
+        scanf("%1d", &el);
         if (i<LENGTH/2) {
             sum+=el;
         }
