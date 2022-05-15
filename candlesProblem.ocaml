@@ -1,0 +1,32 @@
+let read () = Scanf.scanf " %d" (fun x -> x);;
+let rec getCandles = function
+ | 0 -> []
+ | n -> (read ()) :: (getCandles (n-1))
+;;
+let rec getMin = function
+ | [] -> int_of_float 10e7
+ | x::xs -> 
+     if (x<=getMin xs) then x
+     else getMin xs
+;;
+let rec minCandlesEaten candles m =
+ match candles, m with
+ | [], _ -> 0
+ | x::xs, m -> (x-m)+(minCandlesEaten xs m)
+;;
+(*let () = 
+    List.iter (fun x -> print_int x; print_string " ") (getCandles (read ()))
+;;*)
+let rec outputResult = function
+ | 0 -> 0
+ | n ->
+    let candles = getCandles (read ()) in
+    print_int (
+        minCandlesEaten
+            candles
+            (getMin candles)
+    );
+    print_newline ();
+    outputResult (n-1)
+;;
+outputResult (read ());;
