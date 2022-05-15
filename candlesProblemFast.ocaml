@@ -1,0 +1,26 @@
+let read () = Scanf.scanf " %d" (fun x -> x);;
+let rec getInputs total m = function
+ | 0 -> total, m
+ | n -> 
+    let box = read () in
+    getInputs 
+        (total+box) 
+        (if (box<m) then box else m)
+        (n-1)
+;;
+
+let rec outputResult = function
+ | 0 -> 0
+ | n ->
+    let numBoxes = read () in
+    let totalAndMin = getInputs 0 (int_of_float 10e7) numBoxes in
+    match totalAndMin with
+     | total, m ->
+    print_int (
+        total - (m*numBoxes
+    );
+    print_newline ();
+    outputResult (n-1)
+;;
+outputResult (read ());;
+        
