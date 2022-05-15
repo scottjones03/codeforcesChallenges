@@ -17,7 +17,7 @@ let rec outputResult = function
     match totalAndMin with
      | total, m ->
     print_int (
-        total - (m*numBoxes
+        total - (m*numBoxes)
     );
     print_newline ();
     outputResult (n-1)
