@@ -33,7 +33,7 @@ public class MinimumDifferenceStrings {
                     String option=input.next();
                     options[j] = stringToArray(strLen, option);
                 }
-                int minDiff = 26*n;
+                int minDiff = 26*strLen;
                 int diff;
                 for (int p=0; p<n-1; p++) {
                     for (int q=p+1; q<n; q++) {
