@@ -1,0 +1,35 @@
+let nextInt () = Scanf.scanf " %d" (fun x->x);;
+let nextTestCase () = 
+        let a=nextInt () in
+        let b=nextInt () in
+        let c=nextInt () in
+        let x=nextInt () in
+        let y=nextInt () in
+        a, b, c, x, y
+;;
+let rec enoughFood = function
+    | a,b,c,0,y->
+        if (b+c>=y) then true
+        else false
+    | a,b,c,x,y->
+        if (a>=x) then enoughFood ((a-x),b,c,0,y)
+        else if (a+c>=x) then enoughFood (0,b,(a+c-x),0,y)
+        else false
+;;
+let rec getResults = function
+ | 0 -> 0
+ | n ->
+        let hasEnough=enoughFood (nextTestCase ()) in
+        if (hasEnough) then begin
+            print_string "YES\n";
+            getResults (n-1)
+        end
+        else begin
+            print_string "NO\n";
+            getResults (n-1)
+        end
+;;
+let test_cases = nextInt() in
+getResults test_cases
+;;
+    
