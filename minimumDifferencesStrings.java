@@ -15,8 +15,12 @@ public class MinimumDifferenceStrings {
         }
         return arr;
     }
-    public static int solve(int n, int[] test_case) {
-        return 0;
+    public static int calculateDiff(int strLen, int[] w1, int[] w2) {
+        int diff=0;
+        for (int i=0; i<strLen; i++) {
+            diff+=Math.abs(w1[i]-w2[i]);
+        }
+        return diff;
     }
     public static void main(String[] args) {
         Scanner input=new Scanner(System.in); 
@@ -29,7 +33,17 @@ public class MinimumDifferenceStrings {
                     String option=input.next();
                     options[j] = stringToArray(strLen, option);
                 }
-                System.out.println(options[1][1]);
+                int minDiff = 26*n;
+                int diff;
+                for (int p=0; p<n-1; p++) {
+                    for (int q=p+1; q<n; q++) {
+                        diff = calculateDiff(strLen, options[p], options[q]);
+                        if (diff < minDiff) {
+                            minDiff=diff;
+                        }
+                    }
+                }
+                System.out.println(minDiff);
         }
         input.close();
     }
