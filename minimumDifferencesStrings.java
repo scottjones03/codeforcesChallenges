@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
  * MinimumDifferenceStrings
 */
-public class MinimumDifferenceStrings {
+public class minimumDifferencesStrings {
     public static int[] stringToArray(int strLen, String test_case) {
         int[] arr = new int[strLen];
         int i = 0;

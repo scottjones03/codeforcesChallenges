@@ -1,7 +1,7 @@
 /*
 * C Program to Print "Hello World"
 */
-#include <bits/stdc++.h>
+#include <stdio.h>
 using namespace std;
  
 
