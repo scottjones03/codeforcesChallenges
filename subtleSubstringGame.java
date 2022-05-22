@@ -23,20 +23,18 @@ public class subtleSubstringGame {
                 game = input.next();
                 alice_score = 0;
                 bob_score = 0;
-                frontSubScore;
-                backSubScore;
                 while (game.length() > 0) {
                     if (game.length() % 2 == 0) {
                         alice_score+=stringToScore(game);
                         game = "";
                     } else if (game.length() > 1) {
-                        frontSubScore=stringToScore(game[0::game.length()-1]);
-                        backSubScore=stringToScore(game[1::game.length()]);
+                        frontSubScore=stringToScore(game.substring(0,game.length()-1));
+                        backSubScore=stringToScore(game.substring(1, game.length()));
                         if (frontSubScore >= backSubScore ) {
-                            game = Character.toString(game[game.length()-1]);
+                            game = game.substring(game.length()-1);
                             alice_score+=frontSubScore;
                         } else {
-                            game = Character.toString(game[0]);
+                            game = game.substring(0, 1);
                             alice_score+=backSubScore;
                         }
                     }
@@ -45,22 +43,22 @@ public class subtleSubstringGame {
                         bob_score+=stringToScore(game);
                         game = "";
                     } else if (game.length() > 1) {
-                        frontSubScore=stringToScore(game[0::game.length()-1]);
-                        backSubScore=stringToScore(game[1::game.length()]);
+                        frontSubScore=stringToScore(game.substring(0, game.length()-1));
+                        backSubScore=stringToScore(game.substring(1, game.length()));
                         if (frontSubScore >= backSubScore ) {
-                            game = Character.toString(game[game.length()-1]);
+                            game = game.substring(game.length()-1);
                             bob_score+=frontSubScore;
                         } else {
-                            game = Character.toString(game[0]);
+                            game = game.substring(0, 1);
                             bob_score+=backSubScore;
                         }
                     }
                         
                 }
                 if (alice_score > bob_score) {
-                    System.out.println("Alice %d", alice_score-bob_score);
-                else {
-                    System.out.println("Bob %d", bob_score-alice_score);
+                    System.out.println("Alice " + (alice_score-bob_score));
+                } else {
+                    System.out.println("Bob " + (bob_score-alice_score));
                 }
 
         }
