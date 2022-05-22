@@ -1,0 +1,25 @@
+let readInt () = Scanf.scanf " %d" (fun x -> x);;
+let readBerland () = Scanf.scanf " %c%c" (fun a b -> a, b);;
+
+let convertCharsToAlphabetPos = function
+  | a, b -> (Char.code a) - 97, (Char.code b) - 97
+;;
+let getBerlandPos = function
+  | a, b -> 
+    if b<a then a*25+b
+    else if b>a then a*25+b-1
+    else raise (Failure "Value Err!")
+;;
+
+let rec iterator = function
+  | 0 -> 0
+  | n -> 
+    let a, b = convertCharsToAlphabetPos (readBerland ()) in 
+    (* Add 1 as we aren't zero indexing *)
+    print_int ((getBerlandPos (a, b))+1);
+    print_newline ();
+    iterator (n-1)
+;;
+
+let test_cases = readInt () in iterator test_cases;;
+
