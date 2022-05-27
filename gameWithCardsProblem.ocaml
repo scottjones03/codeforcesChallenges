@@ -1,6 +1,6 @@
 let read_int () = Scanf.scanf " %d" (fun x -> x);;
 
-let max_int_from_input max = function
+let rec max_int_from_input max = function
     | 0 -> max
     | n -> 
         let new_in = read_int () in 
@@ -8,11 +8,11 @@ let max_int_from_input max = function
         else max_int_from_input max (n-1)
 ;;
 
-let run_test_case = function
+let rec run_test_case = function
     | 0 -> 0
     | n ->
         let num_alice = read_int () in
-        let max_alice = max_int_from_input 0 num_alice
+        let max_alice = max_int_from_input 0 num_alice in
         let num_bob = read_int () in
         let max_bob = max_int_from_input 0 num_bob in
         if (max_alice > max_bob) then begin
@@ -27,7 +27,7 @@ let run_test_case = function
         end
         else begin
             print_string "Bob\n";
-            print_string "Bob\n"
+            print_string "Bob\n";
             run_test_case (n-1)
         end
 ;;
