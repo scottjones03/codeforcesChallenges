@@ -25,21 +25,24 @@ let read_int () = Scanf.scanf " %d" (fun x -> x);;
 (* if e=0 and f=0, y=b, z=c, x=a+db*)
 (* y=3, z=4 and xmod3=1 and 4modx=4*)
 (* x =1+3p, 4=4+xq, 4=4+(1+3p)q*)
-(* x=a+bp = c + aq, p=(c-a+aq)/b
+(* x=a+bp = c + aq, p=(c-a+aq)/b*)
 let rec get_x = function
     | a, b, c, d ->
         let x = a+d*b in
-        if (x % b == a && c % x == c && b % c = b) then x
+        if (x mod b == a && c mod x == c && b mod c = b) then x
         else get_x (a, b, c, (d+1))
 ;;
 let rec run_cases = function
     | 0 -> 0
     | n -> 
         let a = read_int () in
-        let y = reas_int () in
+        let y = read_int () in
         let z = read_int () in
         let x = get_x (a, y, z, 1) in
-        printf("%d %d %d\n", x, y, z);
+        print_int x; print_string " ";
+        print_int y; print_string " ";
+        print_int z; print_string " ";
+        print_newline ();
         run_cases (n-1)
 ;;
 let num_cases = read_int () in
