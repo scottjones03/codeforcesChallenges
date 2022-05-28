@@ -53,6 +53,6 @@ int main(void) {
                 num_palindromes+=1;
             }
         }
-        printf("%d\n", num_palindromes)
+        printf("%d\n", num_palindromes);
     }
 }
