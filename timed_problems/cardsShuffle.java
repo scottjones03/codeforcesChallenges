@@ -10,7 +10,7 @@ public class cardsShuffle {
     public static int[] take_slice(int[] arr, int start, int end) {
         int[] sliced_arr = new int[end-start];
         for (int i=start; i<end; i++) {
-            sliced_arr[i-start] = arr[start];
+            sliced_arr[i-start] = arr[i];
         }
         return sliced_arr;
     }
