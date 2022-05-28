@@ -38,7 +38,8 @@ let rec run_cases = function
         let a = read_int () in
         let y = read_int () in
         let z = read_int () in
-        let x = get_x (a, y, z, 1) in
+        let d = (z-a)/y in
+        let x = get_x (a, y, z, d) in
         print_int x; print_string " ";
         print_int y; print_string " ";
         print_int z; print_string " ";
