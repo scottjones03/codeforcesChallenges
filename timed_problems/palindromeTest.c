@@ -26,11 +26,11 @@ bool isPalindrome(int string_length, char * test_case) {
     return true;
 }
 char * removeCharAtIdx(int string_length, char * test_case, int delIdx) {
-    char new_string[string_length];
+    char *new_string = malloc(string_length-1);
     int idx = 0;
     for (int i=0; i<string_length; i++) {
         if (i!=delIdx) {
-            new_string[idx] = test_case[delIdx];
+            new_string[idx]= test_case[i];
             idx+=1;
         }
     }
@@ -45,7 +45,7 @@ int main(void) {
         scanf("%d", &string_length);
         num_palindromes = 0;
         char test_case[string_length]; 
-        char temp_case[string_length-1];
+        char *temp_case;
         scanf("%s", test_case);
         for (int j=0; j<string_length; j++) {
             temp_case = removeCharAtIdx(string_length, test_case, j);
@@ -53,6 +53,6 @@ int main(void) {
                 num_palindromes+=1;
             }
         }
-        printf("%d\n", num_palindromes);
+        printf("%d\n", num_palindromes)
     }
 }
