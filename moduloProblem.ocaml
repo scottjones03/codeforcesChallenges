@@ -1,0 +1,47 @@
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+
+
+(* x mod y = a *)
+(* y mod z = b *)
+(* z mod x = c *)
+
+(* x = a + dy *)
+(* y = b + ez *)
+(* z = c + fx *)
+
+(* y = b + e(c + fx) *)
+(* x = a + d(b + e(c+fx)) *)
+(* x(1-def) = a + db + dec *)
+(* either d,e,f=1 or one of d, e, f = 0*)
+(* y = b + e(c + f(a + dy)) *)
+(* y(1-def) = b + ec + efa *)
+(* z(1-def) = c + fa + fdb *)
+
+(* if d,e, f = 1, a+b+c=0 *)
+(* if d=0, x = a, y = b + ec+efa, z = c + fa *)
+(* if e= 0, y = b *)
+(* if f=0, z = c, x =a+db+dec, y=b+ec*)
+(* 1 3 4 -> z = 4, x=1+3d+4ed, y=3+4e*)
+(* if e=0 and f=0, y=b, z=c, x=a+db*)
+(* y=3, z=4 and xmod3=1 and 4modx=4*)
+(* x =1+3p, 4=4+xq, 4=4+(1+3p)q*)
+(* x=a+bp = c + aq, p=(c-a+aq)/b
+let rec get_x = function
+    | a, b, c, d ->
+        let x = a+d*b in
+        if (x % b == a && c % x == c && b % c = b) then x
+        else get_x (a, b, c, (d+1))
+;;
+let rec run_cases = function
+    | 0 -> 0
+    | n -> 
+        let a = read_int () in
+        let y = reas_int () in
+        let z = read_int () in
+        let x = get_x (a, y, z, 1) in
+        printf("%d %d %d\n", x, y, z);
+        run_cases (n-1)
+;;
+let num_cases = read_int () in
+run_cases num_cases
+;;
