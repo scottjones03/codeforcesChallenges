@@ -1,0 +1,38 @@
+let read_word () = Scanf.scanf " %s" (fun x -> x);;
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+
+let rec create_char_list input input_length = function
+    | 0 -> []
+    | n -> (String.get input  (input_length-n))::(create_char_list input input_length (n-1))
+;;
+
+type acceptable_char = A | B | AB ;;
+
+let rec run_case = function
+    | A, [x] -> false
+    | _, [x] -> if (x=='B') then true else false
+    | A, x::xs -> if (x=='A') then run_case AB xs else false
+    | B, x::xs -> if (x=='B') then run_case A xs else false
+    | AB, x::xs -> if (x=='B') then run_case A xs else run_case AB xs
+;;
+
+let rec run_cases = function
+    | 0 -> 0
+    | n -> 
+        let str_case = read_word () in 
+        let lst_case = create_char_list str_case (String.length str_case) (String.length str_case) in
+        if (run_case A lst_case) then begin
+            print_string "YES";
+            print_newline ();
+            run_cases (n-1)
+        end
+        else begin
+            print_string "NO";
+            print_newline ();
+            run_cases (n-1)
+        end
+;;
+
+let num_cases = read_int () in
+run_cases num_cases;;
+

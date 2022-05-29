@@ -15,7 +15,7 @@ let rec iterator = function
   | 0 -> 0
   | n -> 
     let a, b = convertCharsToAlphabetPos (readBerland ()) in 
-    (* Add 1 as we aren't zero indexing *)
+    (* """Add 1 as we aren't zero indexing""" *)
     print_int ((getBerlandPos (a, b))+1);
     print_newline ();
     iterator (n-1)
