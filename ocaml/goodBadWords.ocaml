@@ -8,12 +8,19 @@ let rec create_char_list input input_length = function
 
 type acceptable_char = A | B | AB ;;
 
-let rec run_case = function
+let rec run_case a_count = function
     | A, [x] -> false
     | _, [x] -> if (x=='B') then true else false
-    | A, x::xs -> if (x=='A') then run_case (AB, xs) else false
-    | B, x::xs -> if (x=='B') then run_case (A, xs) else false
-    | AB, x::xs -> if (x=='B') then run_case (A, xs) else run_case (AB, xs)
+    | A, x::xs -> 
+        if (x=='A') then run_case (a_count+1) (AB, xs) 
+        else false
+    | B, x::xs -> 
+        raise (Failure "Value Err")
+    | AB, x::xs -> 
+        if (x=='B' && a_count==1) then run_case 0 (A, xs) 
+        else if (x=='B') then run_case (a_count-1) (AB, xs)
+        else if (x=='A') then run_case (a_count+1) (AB, xs)
+        else raise (Failure "Value Err")
 ;;
 
 let rec run_cases = function
@@ -21,7 +28,7 @@ let rec run_cases = function
     | n -> 
         let str_case = read_word () in 
         let lst_case = create_char_list str_case (String.length str_case) (String.length str_case) in
-        if (run_case (A, lst_case)) then begin
+        if (run_case 0 (A, lst_case)) then begin
             print_string "YES";
             print_newline ();
             run_cases (n-1)
