@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -18,31 +16,33 @@ public class oddSubArrays {
         Scanner input=new Scanner(System.in); 
         int num_cases=input.nextInt(); 
         for (int i = 0; i < num_cases; i++) {
-                int test_case_length =input.nextInt();
-                int[] test_case = new int[test_case_length];
-                for (int j =0; j< test_case_length; j++) {
-                    test_case[j] = input.nextInt();
-                }
-                int num_odd_arrs=0;
-                int current_split=0;
-                int current_combinations=0;
-                for (int j=0; j< test_case_length; j++) {
+            int test_case_length =input.nextInt();
+            int[] test_case = new int[test_case_length];
+            for (int j =0; j< test_case_length; j++) {
+                test_case[j] = input.nextInt();
+            }
+            int num_odd_arrs=0;
+            int current_split=0;
+            int current_max = 0;
+            for (int j=0; j< test_case_length; j++) {
+                if (test_case[j]>current_max) {
+                    current_max=test_case[j];
+                    continue;
+                } else {
                     for (int k=current_split; k< j; k++) {
+                        // System.out.print(j+" "+test_case[k]+" "+test_case[j] +"\n");
                         if (test_case[k] > test_case[j]) {
-                            current_combinations+=1;
-                        }
-                        if (current_combinations==2) {
-                            current_split=j;
-                            System.out.println(j);
-                        
+                            current_split=j+1;
                             num_odd_arrs+=1;
-                            current_combinations=0;
+                            current_max=0;
+                            // System.out.print(current_split+ " and" + num_odd_arrs + "\n");
+                            break;
                         }
                     }
-                } 
-           
-                
-                
+                }
+            } 
+            System.out.println(num_odd_arrs);  
         }
+        input.close();
     }
 }
