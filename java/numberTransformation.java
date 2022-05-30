@@ -1,3 +1,5 @@
+package java;
+
 // y = (b ^ a) * x 
 // a = log_b y/x, b = (y/x) ^ (1/a)
 

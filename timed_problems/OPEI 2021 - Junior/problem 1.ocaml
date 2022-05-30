@@ -1,0 +1,27 @@
+let read_int () =   Scanf.scanf " %d" (fun x -> x);;
+
+let run_case = function
+  | t, s, v ->
+    let time_needed = (float_of_int s) /. (float_of_int v) in 
+    if (time_needed > (float_of_int t)) then begin
+      print_string "NO";
+      print_newline ()
+    end
+    else begin
+      print_string "YES";
+      print_newline ()
+    end
+;;
+let rec run_cases = function
+  | 0 -> 0
+  | n -> 
+    let t = read_int () in 
+    let s = read_int () in 
+    let v = read_int () in 
+    run_case (t, s, v);
+    run_cases (n-1)
+;;
+
+
+let num_cases = read_int () in
+run_cases num_cases;;

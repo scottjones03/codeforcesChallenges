@@ -1,6 +1,5 @@
+package timed_problems;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -40,5 +39,6 @@ public class cardsShuffle {
                 }
                 System.out.println(cards[0]);
         }
+        input.close();
     }
 }
