@@ -1,0 +1,39 @@
+(* 2x-1+2y-1=2(x+y-1)
+o + o = e, o+e=o
+we either need all odd 
+or all even
+
+e.g if we have odd anywhere in sequence,
+the next number must be odd or it must be end of seq,
+if it end of seq , the numbers before must be odd
+*)
+
+let read_int () = Scanf.scanf " %d" (fun x->x);;
+let read_float () = Scanf.scanf " %f" (fun x->x);;
+
+let rec read_seq = function
+| 0 -> 0
+| n ->
+    let item = read_int () in
+    if (item mod 2 ==0) then 1 + read_seq (n-1)
+    else read_seq (n-1)
+;;
+    
+let run_case = function
+| () -> 
+    let n = read_int () in
+    let even_count = read_seq n in
+    if (even_count<=n-even_count) then even_count
+    else n-even_count
+;;
+
+let rec iter_cases = function
+| 0 -> 0
+| n -> 
+    print_int (run_case ());
+    print_newline ();
+    iter_cases (n-1)
+;;
+
+let t= read_int () in 
+iter_cases t;;
