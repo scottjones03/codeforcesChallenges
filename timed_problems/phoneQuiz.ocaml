@@ -1,0 +1,12 @@
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+
+let result = function
+  | a, b -> 
+    if (a-abs(a-b)>0) then 0
+    else a+abs(a-b)+1
+;;
+
+let real_answer = read_int () in 
+let player_answer = read_int () in 
+print_int (result (real_answer, player_answer))
+;;

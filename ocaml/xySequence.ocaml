@@ -1,0 +1,119 @@
+(* 
+   build sequence a0, a1, ... , an
+   a0 = 0, 
+   1)ai = a(i-1)+x or 2)ai = a(i-1)-y
+   ai <= B 
+   
+   maximise sum
+   
+   want all ai to be as close to B as possible
+   - do 1) up to B then (2) and (1) alternating
+ 
+   a0, a1, a2, ... , ak, a(k+1), ... , an
+ 
+   0, x, 2*x, ... , k*x where k*x <= B, k*x-y, ... , an
+ 
+   sum = (x+2*x+...+k*x) + floor((n-k)/2)*(k*x-y+k*x) + (k*x-y if n-k is not even)
+ 
+   n=5, B=100, x=1, y=30
+ 
+    0, 1, 2, 3, 4, 5 = 5/2(5+1) =15
+ 
+  
+   n=7, B=1e8, x=1e8, y=1e8
+ 
+   0, 1e8, 0, 1e8, 0, 1e8, 0 = 7
+ 
+   k = 1e8 / 1e8 = 1 < n
+   s1 = (1e8*1*2/2)=1e8
+   s2 = 6*(1e8)/2 = 3*1e8
+   n-k is even so 4*1e8
+ 
+   n=4, B=1, x=7, y=3
+ 
+   0, -3, 4 -> PROBLEM!
+ 
+   k = 1 / 7 = 0 
+   s1 = 0
+   s2 = (4)*(2*0-3)/2=-6   
+ 
+   add +x until no longer possible
+   need to -y until we can +x
+   add +x 
+   need to -y until we can +x
+   repeat O(n) complexity
+ 
+   add +x k1 times
+   subtract y k2 times
+   add x
+   subtract y k2 times
+   O(1) complexity if we calculate k1 and k2
+ 
+   k1*x-k2*y + x<=B
+   (k1+1)*x-B<=k2*y
+   ((k1+1)*x-B)/y <= k2, since k2 isn't necessarily constant we have to do O(n)
+ 
+   e.g 0, -3, -6, 1, -2, -5, -8, 0 (goes from 2 to 3)
+ 
+   n=5, B=100, x=1, y=30
+ 
+   0 + alternate_sum 100 1 30 1 4
+   0 + 1 + alternate_sum ... 2 3
+   0 + 1 + 2 + ... 3 2
+   0 + 1 + 2 + 3 + ... 4 1
+   0 + 1 + 2 + 3 + 4 + ... 5 0
+   0 + 1 + 2 + 3 + 4 + 5
+ 
+    *)
+ 
+ 
+ 
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let read_float () = Scanf.scanf " %f" (fun x -> x);;
+  
+let rec alternate_sum _B x y current = function 
+  | 0 -> current
+  | n -> 
+    if (current +. x<=_B) then current +. alternate_sum _B x y (current +. x) (n-1)
+    else current +. alternate_sum _B x y (current -. y) (n-1)
+;;
+  
+let run_case = function
+  | () -> 
+    let n = read_int () in 
+    let _B = read_float () in 
+    let x = read_float () in 
+    let y = read_float () in
+    alternate_sum _B x y 0.0 n
+;;
+  
+  
+let print_big_float_as_int = fun x ->
+    if (x!='.') then print_char (x)
+;;
+
+let rec print_big_float_as_int2 = function
+| current_float, current_order ->
+  if (current_float <= float_of_int max_int) then current_float, current_order
+  else print_big_float_as_int2 ((current_float/.10.0), (current_order+1))
+;;
+let rec print_order = function 
+  | 0 -> ()
+  | n ->
+    print_int 0;
+    print_order (n-1)
+;;
+let rec iter_cases = function 
+  | 0 -> 0
+  | n -> 
+    let sum = run_case () in 
+    (* let _ = String.iter print_big_float_as_int (string_of_float sum) in *)
+    let float_int, order = print_big_float_as_int2 (sum, 0) in 
+    print_int (int_of_float float_int);
+    print_order order;
+    print_newline ();
+    iter_cases (n-1)
+;;
+  
+let t = read_int () in 
+iter_cases t ;;

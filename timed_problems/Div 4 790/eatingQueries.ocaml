@@ -1,0 +1,79 @@
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+
+let rec insert x = function
+  | [] -> [x]
+  | y::ys -> 
+    if x>=y then x::y::ys
+    else y::insert x ys
+;;
+
+let rec insertSort = function
+  | [] -> []
+  | [x] -> [x]
+  | x::xs -> insert x (insertSort xs)
+;;
+
+let rec read_candles_property = function
+  | 0 -> []
+  | n -> (read_int ()) :: (read_candles_property (n-1))
+;;
+let rec read_candles_property_sorted = function
+  | 0 -> []
+  | 1 -> [read_int ()]
+  | n -> insert (read_int ()) (read_candles_property (n-1)) 
+;;
+
+(* 5 1 3 *)
+(* 5, 1, 3 and [] -> 
+   let left, right = partition [] [] 5 1,3 
+      1,3 -> partition [] [1] 5 3
+      3 -> partition [] [1, 3] 5 []
+      [] -> [] and [3,1]
+    quickSortFaster ([], 5::quickSortFASTER ([3, 1], []))
+
+*)
+let rec partition left right pivot = function
+  | [] -> left, right
+  | x::xs ->
+    if x>pivot then partition (x::left) right pivot xs
+    else partition left (x::right) pivot xs
+;;
+let rec quickSortFaster = function
+  | [], sorted -> sorted
+  | [x], sorted -> x::sorted
+  | pivot::xs, sorted -> let left, right = partition [] [] pivot xs in
+    quickSortFaster (left, (pivot::(quickSortFaster (right, sorted)))) 
+;;
+
+let rec find_num_candles num = function
+  | 0, _ -> num
+  | q, [] -> -1
+  | q, m::sorted_sugars -> find_num_candles (num+1) ((max (q-m) 0), sorted_sugars)
+;;
+
+
+
+
+let rec run_case sorted_sugars = function
+  | 0 -> 0
+  | q ->
+    let amount_needed = read_int () in
+    print_int (find_num_candles 0 (amount_needed, sorted_sugars));
+    print_newline ();
+    run_case sorted_sugars (q-1)
+;;
+
+let rec iter_cases = function
+  | 0 -> 0
+  | t -> 
+    let n=read_int () in
+    let q=read_int () in
+    (* let sugars = read_candles_property n in 
+    let sorted_sugars = quickSortFaster (sugars, []) in *)
+    let sorted_sugars = read_candles_property_sorted n in
+    let _ = run_case sorted_sugars q in
+    iter_cases (t-1)
+;;
+
+let t = read_int () in
+iter_cases t;;

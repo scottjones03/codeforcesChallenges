@@ -4,11 +4,11 @@ let run_case = function
   | t, s, v ->
     let time_needed = (float_of_int s) /. (float_of_int v) in 
     if (time_needed > (float_of_int t)) then begin
-      print_string "NO";
+      print_string "NAO";
       print_newline ()
     end
     else begin
-      print_string "YES";
+      print_string "SIM";
       print_newline ()
     end
 ;;

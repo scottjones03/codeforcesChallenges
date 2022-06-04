@@ -1,0 +1,91 @@
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let rec read_arr = function
+  | 0 -> []
+  | n -> (read_int ())::(read_arr (n-1))
+;;
+(* 3 3 10 10 *)
+(* 10 10 3 3 *)
+
+(* 3 3 10 10 *)
+(* 10 10 3 3 *)
+
+(* 3 10 10 10 *)
+(* 10 3 3 3 *)
+
+let do_swap a1 a2 b1 b2= function
+  | () ->
+  let without_swap = abs (a1-a2) + abs (b1-b2) in 
+  let with_swap = abs (b1-a2) + abs (a1-b2) in
+  (* print_int with_swap;
+  print_string " ";
+  print_int without_swap; *)
+  if with_swap < without_swap then true
+  else false
+;;
+let rec through_arr did_swap newa newb = function 
+  | ([], []) -> did_swap, newa, newb
+  | ([a1], [b1]) -> did_swap, a1::newa, b1::newb
+  | ([a1; a2], [b1; b2]) -> 
+    let current_move = do_swap a1 a2 b1 b2 () in
+    if (current_move==true) then begin 
+      let current_move = do_swap a2 b1 b2 a1 () in
+      if (current_move==true) then true, (b2::b1::newa), (a2::a1::newb)
+      else true, (a2::b1::newa), (b2::a1::newb)
+    end
+    else begin
+      let current_move = do_swap a2 a1 b2 b1 () in
+      if (current_move==true) then true, (b2::a1::newa), (a2::b1::newb)
+      else did_swap, (a2::a1::newa), (b2::b1::newb)
+    end
+  | (a1::a2::atail,  b1::b2::btail) -> 
+    let current_move = do_swap a1 a2 b1 b2 () in
+    if (current_move==true) then begin
+      through_arr true (b1::newa) (a1::newb) (a2::atail,b2::btail)
+    end
+    else begin
+      through_arr did_swap (a1::newa) (b1::newb) (a2::atail,b2::btail)
+    end
+  | _ -> raise (Failure "Value Err")
+;;
+let rec rev_list correct = function 
+  | [] -> correct
+  | x::xs -> rev_list (x::correct) xs
+;;
+let rec repeat_swaps = function
+  | false, a, b -> a, b
+  | true, a, b -> 
+    let did_swap, _newa, _newb = through_arr false [] [] (a, b) in
+    let  newa = rev_list [] _newa in 
+    let newb = rev_list [] _newb in
+    (* List.iter (fun x -> print_int x) newa;
+    print_newline ();
+    List.iter (fun x -> print_int x) newb;
+    print_newline (); *)
+    repeat_swaps (did_swap, newa, newb)
+;;
+let rec calculate_diff s = function
+  | [], [] -> s
+  | [a], [b] -> s
+  | a1::a2::atail, b1::b2::btail ->
+    let current_s = abs (a1-a2) + abs (b1-b2) in 
+    calculate_diff (current_s+s) (a2::atail, b2::btail)
+  | _, _ -> raise (Failure "Value Err")
+;;
+
+let run_case = function
+  | n ->
+  let a = read_arr n in 
+  let b = read_arr n in 
+  let besta, bestb = repeat_swaps (true, a, b) in 
+  print_int (calculate_diff 0 (besta, bestb));
+  print_newline ()
+;;
+let rec iter_cases = function
+  | 0 -> 0
+  | t ->
+    let n= read_int () in
+    run_case n;
+    iter_cases (t-1)
+;;
+let t = read_int () in 
+iter_cases t;;
