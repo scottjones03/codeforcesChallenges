@@ -1,0 +1,22 @@
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+(*
+1 10 -> need 9 10 ie +8 when diff is +9
+abs(n-m)-abs((n-m)mod2)+n+m
+*)
+let run_case = function
+| () ->
+    let n = read_int ()-1 in
+    let m = read_int ()-1 in
+    if ((n==0 || m==0) && (n+m)>1) then Printf.printf "-1\n"
+    else Printf.printf "%d\n" (abs(n-m)-abs((n-m) mod 2)+n+m)
+;;
+
+let rec iter_cases = function
+| 0 -> 0
+| n ->
+    run_case();
+    iter_cases (n-1)
+;;
+
+let t = read_int () in
+iter_cases t;;
