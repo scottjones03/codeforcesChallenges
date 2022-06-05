@@ -1,0 +1,52 @@
+(* n+1 integer sequence where 0<ai<n or ai=n**2
+   sum s and n are known, find number of elements
+   
+   if we have k items = n**2, then
+   s = k*n**2 + (n+1-k)*mu0
+   mean , mu0 <= n
+   sk <= k*n^2 + (n-k+1)*n == (k+1)*n^2 - (k-1)*n < (k+1)*n^2
+   for k+1,
+   s(k+1) = (k+1)*n^2 + (n-k)*mu1 and mu1>=0 so s(k+1) >= (k+1)*n^2
+   so sk <= k*n^2 + (n-k+1)*n < s(k+1) 
+   sk < (k+1)*n^2 <= s(k+1)
+   or k*n^2 <= sk < (k+1)*n^2
+
+   k<=sk/n^2 , k+1 > sk/n^2 
+   sk/n^2 - 1 < k <= sk/n^2
+   
+   so we need to iterate through k=0, ..., n+1
+   until the condition holds
+   
+*)
+
+let read_int () = Scanf.scanf " %d" (fun x->x);;  
+let read_float () = Scanf.scanf " %f" (fun y->y);;
+
+let rec find_k s n = function
+| k ->
+  if (k>n+1) then raise (Failure "Value ERR")
+  else begin 
+    let lower_lim = ((float) k)*.(((float) n)**2.0) in 
+    let upper_lim = ((float) (k+1))*.(((float) n)**2.0) in
+    if (lower_lim <= s && s < upper_lim ) then k
+    else find_k s n (k+1)
+  end
+;;
+
+let run_case = function
+| () ->
+  let n = read_float () in 
+  let s = read_float () in 
+  let k = floor ((s)/.(n*.n)) in 
+  Printf.printf "%.0f\n" k
+;;
+
+let rec iter_cases = function
+| 0 -> 0
+| n ->
+  run_case ();
+  iter_cases (n-1)
+;;
+
+let t = read_int () in 
+iter_cases t;;

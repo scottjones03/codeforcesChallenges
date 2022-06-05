@@ -1,0 +1,97 @@
+(* can paint each element Red, Blue, unpainted
+   Count(c) == number painted with color
+   Sum(c) == sum of elemented painted with color
+   
+   Is it possible to paint so Sum(R) > Sum(B) but Count(R) < Count(B)
+   the minimum case would be (since we using ints):
+   Sum(R) >= Sum(B)+1 and Count(R)<=Count(B)+1
+   ie r1+r2+...+r(n-1) >= b1 + b2 + ... +bn+1
+   
+   for 1 2 3 , it's not possible
+   ie if we pick max for r and then rest for b,
+    we get S(R)=3 and S(B)=3
+   
+   best tactic would be to pick the maximum
+   elements for r and minimum elements for b
+   
+   to exemplify the difference, since all rx > by,
+   we should select the maximum count for both groups, ie
+   floor((n+1/2)) items for b and floor((n-1)/2) items for r
+   
+   for even n, n/2 items for b, n/2-1 items for r, missing n/2 idx
+   -> up to n/2-1 idx for b, miss n/2 and then r
+   for odd n, (n+1)/2 items for b and (n-1)/2 items for a
+   -> up to (n-1)/2 idx for b, then n-1 for r
+*)
+
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+
+(* Fast quick sort *)
+let rec partition pivot left right = function 
+| [] -> left, right
+| x::xs ->
+  if (x<=pivot) then partition pivot (x::left) right xs 
+  else partition pivot left (x::right) xs 
+;;
+let rec quickSort sorted = function
+| [] -> sorted
+| [pivot] -> pivot::sorted
+| pivot::xs ->
+  let left, right = partition pivot [] [] xs in 
+  quickSort (pivot::(quickSort sorted right)) left
+;;
+
+let rec read_arr = function
+| 0 -> []
+| n -> 
+  let read_float () = Scanf.scanf " %f" (fun x-> x) in 
+  read_float () :: read_arr (n-1)
+;;
+(* 
+   1 2 3
+   (n-1)/2 = 1, so 0,1 idxs for b and 2 for r
+   1 2
+   (n-1)/2 = 1 so 0 idxs for b and none for r
+   1 2 3 4 
+   n/2 = 2 so 0,1,2 idxs for b and 3 for r
+*)
+let rec get_r_b r b n = function 
+| _, [] -> r, b
+| idx, x::xs ->
+  if (n mod 2 == 0) then begin
+  if (idx <= n/2-1) then get_r_b r (x+.b) n (idx+1, xs)
+  else if (idx == n/2) then get_r_b r b n (idx+1, xs)
+  else get_r_b (x+.r) b n (idx+1, xs) 
+  end 
+  else begin
+    if (idx <= (n-1)/2) then get_r_b r (x+.b) n (idx+1, xs)
+    else get_r_b (x+.r) b n (idx+1, xs) 
+  end
+;;
+
+let run_case = function
+| () -> 
+  let n = read_int () in 
+  (* let arr = quickSort [] (read_arr n) in *)
+  let arr = List.fast_sort compare (read_arr n) in
+  (* List.iter (fun x-> Printf.printf " %f" x) arr; *)
+  let r, b = get_r_b 0.0 0.0 n (0, arr) in 
+  (* Printf.printf "\n%f %f" r b; *)
+  if (r>=b+.1.0) then Printf.printf "YES\n"
+  else Printf.printf "NO\n"
+;;
+
+let rec iter_cases = function 
+| 0 -> 0
+| n ->  
+  run_case ();
+  iter_cases (n-1)
+;;
+
+let t=read_int () in 
+iter_cases t;;
+
+
+
+
+
