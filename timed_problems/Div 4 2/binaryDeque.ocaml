@@ -1,0 +1,53 @@
+
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let rec read_arr i = function 
+| 0 -> []
+| n -> 
+  let x = read_int () in
+  if (x==1) then i::(read_arr (i+1) (n-1))
+  else read_arr (i+1) (n-1)
+;;
+
+let rec get_back_arr n = function 
+| [] -> []
+| x::xs -> (n-1-x)::get_back_arr n xs
+;;
+
+
+let rec remove current_s s num_operations front_idx rev_idx = function 
+| (_, []) -> -1
+| ([], _) -> -1
+| (f::f_arr, r::r_arr) ->
+  if (front_idx==rev_idx) then -1
+  else begin 
+    if (current_s == s) then num_operations
+    else if (abs (f-front_idx)<abs (rev_idx-r)) then remove (current_s-1) s (num_operations+abs (f-front_idx)) (f) (rev_idx) (f_arr, r::r_arr)
+    else remove (current_s-1) s (num_operations+abs (r-rev_idx)) (front_idx) (r) (f::f_arr, r_arr)
+  end
+;;
+let run_case = function
+| () -> 
+  let n = read_int () in 
+  let s = read_int () in 
+  let f_arr = read_arr 0 n  in 
+  let r_arr = List.rev f_arr in 
+  (* List.iter (fun x -> print_int x) f_arr;
+  List.iter (fun x -> print_int x) r_arr; *)
+  if (List.length f_arr < s) then -1
+  else begin
+  let front_idx = -1 in 
+  let rev_idx = n in 
+  remove (List.length f_arr) s 0 front_idx rev_idx (f_arr, r_arr)
+  end
+
+;;
+
+let rec iter_cases = function 
+| 0 -> 0
+| n ->
+  Printf.printf "%d\n" (run_case ());
+  iter_cases (n-1)
+;;
+
+let n =read_int () in 
+iter_cases n;;

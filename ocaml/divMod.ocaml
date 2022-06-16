@@ -1,0 +1,63 @@
+(* 
+   f(a, x) = floor(x/a)+x mod a
+   find max f(a, x) where a is fixed and l <= x <= r
+   need to find values where x mod a is maximum
+   then pick largest x from these values
+   
+   if we know l mod a = y where 0<=y<a
+   and we know we have r-l+1 terms
+   if each term is l, l+1, l+2, ..., l+(r-l)
+   and x mod a is y, y+1 mod a, y+2 mod a, ..., y+(r-l) mod a
+
+   if we know r mod a = z
+   each term z-(r-1) mod a, ..., z-1 mod a , z mod a
+
+   z - k = -1 is the maximum, so k=z+1=rmoda + 1 
+
+   y = r mod a
+   if y == a-1 then r
+   else then 
+    if r - (y + 1) >= l then r - (y+1)
+    else then r
+
+
+*)
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let read_long () = Scanf.scanf " %Ld" (fun x -> x);;
+let read_float () = Scanf.scanf " %f" (fun x -> x);;
+
+let modulo = function 
+| x, y ->
+  let f, r = modf (x/.y) in 
+  (* Printf.printf "%f " f; *)
+  f*.y
+;;
+
+
+let run_case = function 
+| () ->
+  let l = read_float () in 
+  let r = read_float () in 
+  let a = read_float () in 
+  let k = modulo (r, a) in
+  let f_r = k +. floor(r /. a) in
+  (* Printf.printf "%.0f " k; *)
+  if (k==a-.1.0) then Printf.printf "%.0f\n" f_r
+  else begin 
+    let x_with_highest_mod = r -. (k +. 1.0) in 
+    let f_x = a-.1.0+.floor (x_with_highest_mod /. a) in
+    if (x_with_highest_mod>=l) then Printf.printf "%.0f\n" (max f_x f_r) 
+    else Printf.printf "%.0f\n" f_r
+  end
+;; 
+
+let rec iter_cases = function
+| 0 -> 0 
+| n -> 
+  run_case (); 
+  iter_cases (n-1) 
+;; 
+
+
+let t = read_int () in 
+iter_cases t;;

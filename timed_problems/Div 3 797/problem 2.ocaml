@@ -1,0 +1,48 @@
+(* a and b . can decrement each value in a by 1, but not b
+   so all values in a have to be greater than all values in b 
+   also all values in a need a common difference between them and b
+   (element wise)
+*)
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let read_float () = Scanf.scanf " %f" (fun x -> x);;
+let rec read_arr = function 
+| 0 -> []
+| n -> 
+  let x = read_float () in
+  x::(read_arr (n-1))
+;;
+
+let rec compare_arr common_diff = function
+| ([], []) -> Printf.printf "YES\n"
+| (a::arr, b::brr) -> 
+  let temp_common_diff = a-.b in
+  if (common_diff = -1.) then begin 
+    if (temp_common_diff < -0.1) then Printf.printf "NO\n"
+    else if (b=0.) then compare_arr common_diff (arr, brr)
+    else compare_arr temp_common_diff (arr, brr)
+  end
+  else begin
+   if (temp_common_diff=common_diff || b=0.) then compare_arr common_diff (arr, brr)
+   else Printf.printf "NO\n"
+  end
+| _ -> raise (Failure "Value Err")
+;;
+
+let run_case = function
+| () ->
+  let n = read_int () in
+  let a = read_arr n in 
+  let b = read_arr n in 
+  compare_arr (-1.) (a, b)
+;;
+
+let rec iter_cases = function
+| 0 -> 0
+| n -> 
+  run_case ();
+  iter_cases (n-1)
+
+;;
+
+let t = read_int () in 
+iter_cases (t);;
