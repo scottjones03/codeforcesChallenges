@@ -1,0 +1,85 @@
+(* 
+   permutation given
+   
+   undirected graph:
+    edge between i and j <=> pi > pj
+    
+   need to count number of connected components
+   => u and v in same connected component when there's
+   a path from u to v
+
+   Create connections first
+   Loop through connections and tick off connections as you go
+   Stop when connections are zero
+
+   Find max element in array:
+   -> if amax at i, all i to n are a group
+   Find minimmum element in i to n
+   Find maximum element in 0 to i-1, (say at j)
+   -> if minimum<maximum, all j to n is a group
+      -> repeat 2, 3
+   -> else all i to n is one group and 0 to i-1 is separate.
+   *)
+
+let read_int () = Scanf.scanf " %d" (fun x -> x);;
+let rec make_input_arr = function
+| (n, arr, i) -> 
+  if (i==n) then ()
+  else begin
+  arr.(i) <- read_int ();
+  make_input_arr (n, arr, (i+1))
+  end
+;;
+let rec get_max_with_idx = function 
+| (n, arr, m, j, i) ->
+  if (i=n) then m, j
+  else begin
+    if (arr.(i)>m) then get_max_with_idx (n, arr, (arr.(i)), i, (i+1))
+    else get_max_with_idx (n, arr, m, j, (i+1))
+  end
+;;
+let rec get_min = function 
+| (n, arr, min, i) ->
+  if (i=n) then min
+  else begin
+    if (arr.(i)<min) then get_min (n, arr, (arr.(i)), (i+1))
+    else get_min (n, arr, min, (i+1))
+  end
+;;
+
+let rec get_num_groups = function
+| (_, _, 0) -> 0
+| (n, arr, prev_i) ->
+  let iMax, i = get_max_with_idx (prev_i, arr, (-1), (-1), 0) in 
+  let jMax, j = get_max_with_idx (i, arr, (-1), (-1), 0) in 
+  let iMin = get_min (n, arr, n, i) in 
+  (* print_int iMax;
+  print_int jMax;
+  print_int iMin; *)
+  if (iMin<jMax) then begin
+    (* print_string "N"; *)
+    if (i=0) then 1
+    else get_num_groups (n, arr, i)
+  end
+  else begin 
+    (* print_string "Y"; *)
+    1 + get_num_groups (n, arr, i)
+  end
+;;
+let run_case = function
+| () ->
+  let n = read_int () in 
+  let arr = Array.make n 0 in 
+  make_input_arr (n, arr, 0);
+  print_int (get_num_groups (n, arr, n));
+  print_newline ()
+;;
+let rec iter_cases = function 
+| 0 -> 0
+| t ->
+  run_case ();
+  iter_cases (t-1)
+;;
+
+let t = read_int () in 
+iter_cases t;;

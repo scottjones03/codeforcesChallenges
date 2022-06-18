@@ -19,11 +19,10 @@ public class reverse {
 //     OR if 1 in first, put 2 in second and so on.
 //
 
-    public static int[] do_swap(int n, int[] a, int l, int r) {
-        int[] copy = new int[n];
+    public static void do_swap_and_out(int n, int[] a, int l, int r) {
         for (int i = 0; i < n; i++) {
             if (i < l || i > r) {
-                copy[i] = a[i];
+                System.out.printf("%d ", a[i]);
             } else {
                 // int idx1 = r - i;
                 // int idx2 = i - l;
@@ -31,10 +30,10 @@ public class reverse {
                 // diff is r, r-2, r-4, ..., r-l-2, r-l
                 // diff = r-2*idx2, aIdx = idx2 + r -2*idx2 = r - idx2
                 //  aIdxc = r+l-i
-                copy[i] = a[r+l-i];
+                System.out.printf("%d ", a[r+l-i]);
             }
         }
-        return copy;
+        System.out.println();
     }
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -42,28 +41,17 @@ public class reverse {
         for (int i = 0; i < t; i++) {
             int n = in.nextInt();
             int[] a = new int[n];
+            int l=-1;
+            int r=-1;
             for (int j = 0; j < a.length; j++) {
                 a[j] = in.nextInt();
-            }
-            int l=0;
-            int r=0;
-            for (int j = 1; j < a.length+1; j++) {
-                if (a[j-1]!=j) {
-                    l = j-1;
-                    for (int k = 0; k < a.length; k++) {
-                        if (a[k]==j) {
-                            r = k;
-                            break;
-                        }
-                    }
-                    break;
+                if (l == -1 && a[j]!=j+1) {
+                    l = j;
+                } else if (r == -1 && l != -1 && a[j] == l+1) {
+                    r = j;
                 }
             }
-            int[] out = do_swap(n, a, l, r);
-            for (int x : out) {
-                System.out.printf("%d ", x);
-            }
-            System.out.println();
+            do_swap_and_out(n, a, l, r);
 
         }
         in.close();
