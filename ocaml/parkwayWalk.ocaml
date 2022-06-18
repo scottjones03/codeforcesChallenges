@@ -1,0 +1,26 @@
+let read_int () = Scanf.scanf " %d" (fun x-> x);;
+
+
+let rec get_energy_needed = function
+| 0 -> 0
+| n -> read_int () + get_energy_needed (n-1)
+;;
+
+let run_case = function
+| () ->
+     let n = read_int () in
+     let m = read_int () in
+     let r = get_energy_needed (n) in
+     if (m>=r) then Printf.printf "%d\n" 0
+     else Printf.printf "%d\n" (r-m)
+;;
+
+let rec iter_cases = function
+| 0 -> ()
+| t -> 
+     run_case ();
+     iter_cases (t-1)
+;;
+
+let t = read_int () in
+iter_cases t;;
