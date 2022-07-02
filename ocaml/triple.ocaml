@@ -1,0 +1,40 @@
+(* print any value that appears atleast three times or print -1
+   1<=ai<=n, so can have a count array size n? Or sort and see if adjacent next to each other?
+    comparsion sort is atleast O(nlgn)
+    counting is atmost O(n)
+*)
+
+let read_int () = Scanf.scanf " %d" (fun x-> x);;
+
+let rec fill_count_arr = function
+| (count_arr, 0) -> count_arr
+| (count_arr, i) ->
+  let x = read_int () in 
+  count_arr.(x-1) <- (count_arr.(x-1)+1);
+  fill_count_arr (count_arr, (i-1))
+;;
+
+let rec consume_count_arr = function 
+| (n, count_arr, k, i) ->
+  if (i=n) then -1
+  else begin 
+    if (count_arr.(i)>=k) then i+1
+    else consume_count_arr (n, count_arr, k, (i+1))
+  end
+;;
+let run_case = function
+| () -> 
+  let n = read_int () in
+  let count_arr = Array.make n 0 in 
+  let filled_arr = fill_count_arr (count_arr, n) in
+  let x = consume_count_arr (n, filled_arr, 3, 0) in 
+  Printf.printf "%d\n" x
+;;
+
+let rec iter_cases = function 
+| 0 -> ()
+| t -> 
+  run_case ();
+  iter_cases (t-1)
+;;
+let t = read_int () in iter_cases (t);;

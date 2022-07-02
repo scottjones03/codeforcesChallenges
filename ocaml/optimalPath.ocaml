@@ -1,0 +1,118 @@
+(* nxm table, aij = (i-1)*m +j 
+   turtle in 1,1 wants to go to (n,m)
+   find min possible cost to go from 1,1 to n,m
+   
+   down cost from aij = (i)*m + j
+   right cost from aij = (i-1)*m + j+1 
+
+   down -right = m-1
+   since m>=1, then down>=right
+   
+   d, r = (i*m +j) + (i*m + j +1) = 2*(i*m+j)+1
+   r, d = ((i-1)*m + j+1) + (i*m + j+1) = 2*(i*m+j)+2-m
+
+   since m>=1, then -m<=-1, 2-m<=1, (r, d<=d, r)
+
+   d, d, r, r = 4*(i*m+j)+3*m+3
+   d, r, d, r = 4*(i*m+j)+1+m+1+m+2
+
+   diff = m-1, so (ddrr>=drdr)
+
+   if (n>=m) then dr... m times... d... n-m times
+   
+
+   in any order we will have to pay: 
+
+   going down payment = m*(0 + 1 + 2 + ... + n-1) = m*n*(n-1)/2
+   going along payment, exc row = 1 + 2 + 3 + 4+ ... + m = m*(m+1)/2
+   
+   payment = e + m * (n(n-1)/2 + (m+1)/2)
+
+   e = (m*m*(n-k1)) + (n*(m-k2)) where m*(n-k1) is mean row going along and m-k2 is mean column going down
+
+   e = m(n(m+1)) - m*m*k1 - n*k2
+   (want to maximise k1 and k2)
+   k1 <= n and k2 <= m 
+   m*m*k1 <= m*m*n, n*k2 <= n*m
+
+   (k1, k2) = (0, n), (1)
+
+   so better to maximise k1 than k2
+   for each increase in k1, cost decreases by m*m
+   for each increase in k2, cost decreases by n
+
+   we can increase k1 n times and k2 m times.
+
+
+   if k1 increases by 1, then 
+
+   3, 2 -> 1+2+4+6
+   7, 1 -> 1+...+7
+   1, 10 -> 1+2+...+10
+   5, 5->1+2+...+5+10+15+20+25
+
+
+   any extra cost is the cost of the row each
+   time we go along + the cost of the column each
+   time we go down
+
+   there is always a +m increase going down
+   there is always a +1 increase going along
+
+   want to minimise the current sum
+
+   current sum starts at 1
+
+   need to go along m and down n
+
+   always optimal to go along first and m>=1 then go along
+
+   p(n+m)=p(n+m-1)+m=(p(n+m-2)+m)+m
+
+   s = p(1)+p(2)+...+p(n+m-1)
+     = p(1)+(p(1)+k1)+...+p(n+m-1)
+     = p(1)+(p(1)+k1)+(p(1)+k1+k2)+...+p(n+m-1)
+     = (n+m-1)p(1)+(n+m-2)*k1+(n+m-3)*k2+...+k(n+m-2)
+
+    so to minimise the payment it is best to 
+    choose +1 first then +m
+
+    we need choose n-1 +m and m-1 +1
+
+    s = (n+m-1)p(1)+((n+m-1-1)+...+(n+m-1-(m-1)))+(n-1+...+1)*m
+      = (n+m-1)+((m-1)(n+m-1)-(m(m-1)/2))+n(n-1)*m/2
+      = (n+m-1)m-m((m-1)+n(n-1))/2
+      = m((n+m-1)-((m-1)+n(n-1))/2)
+
+    n=2, m=3
+
+    s = (1+2+3+...+m-1)+m*(1+2+3+...+n)
+    s = m(m-1)/2+m*n(n+1)/2
+
+    n=2, m=3
+    s=3+3*2*3/2=12
+
+*)
+
+
+let read_long () = Scanf.scanf " %Ld" (fun x->x);;
+let read_int () = Scanf.scanf " %d" (fun x-> x);;
+let run_case = function 
+| () ->
+  let n = read_long () in 
+  let m = read_long () in 
+  let s1 = Int64.div (Int64.mul m (Int64.pred m)) (Int64.of_int 2) in 
+  let s2 = Int64.div (Int64.mul m (Int64.mul n (Int64.succ n))) (Int64.of_int 2) in 
+  let s = Int64.add s1 s2 in
+  Printf.printf "%Ld\n" s
+;;
+
+let rec iter_cases = function 
+| 0 -> ()
+| t -> 
+  run_case ();
+  iter_cases (t-1)
+
+;;
+
+let t=read_int() in iter_cases t;;
