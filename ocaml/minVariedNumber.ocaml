@@ -1,0 +1,26 @@
+let read_int () = Scanf.scanf " %d" (fun x-> x);;
+
+let run_case = function
+| n ->
+    let rec get_digits = function
+    | (x, c) ->
+         if (x<10) then begin
+             if (x<=c) then [x]
+             else c::get_digits((x-c),(c-1))
+         end
+         else c::get_digits((x-c),(c-1))
+     in
+     let ds = get_digits (n, 9) in
+     List.iter (fun x-> print_int x) (List.rev ds);
+     print_newline ()
+;;
+
+let rec iter_cases = function
+| 0 -> ()
+| t ->
+     let n = read_int () in
+     run_case (n);
+     iter_cases (t-1)
+;;
+
+let c = read_int () in iter_cases (c);;
