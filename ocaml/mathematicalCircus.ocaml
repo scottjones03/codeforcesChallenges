@@ -1,0 +1,86 @@
+(*
+Consider the following:
+
+i) kmod4=0:
+ means bmod4=0
+or anod4=0
+or amod4=bmod4=2
+-> (4,),(8,),...
+-> (,4),(,8),...
+-> (2,6),(10,14),...
+-> (1,4),(3,8),(5,12),...
+-> not possible
+
+ii) kmod4=1
+amod4=3 or bmod4=0 
+or (amod4=1 and bmod4=2)
+->(1,2),(5,6),...
+->(3,),(7,),...
+->(,4),(8,),...
+->(1,2),(3,4),(5,6),...
+-> possible when n is even
+
+iii) kmod4=2
+amod4=2 or bmod4=0
+or (amod4=0 and bmod4=2)
+->(4,2),(8,6),(12,10),...
+->(2,1),(6,5),(10,9)...
+->(3,4),(7,8),(11,12),...
+->(2,1),(3,4),(6,5),...
+-> possible when n is even
+
+iv) kmod4=3
+amod4=1 or bmod4=0
+or (amod4=3 and bmod4=2)
+->(1,),(5,),(9,)...
+->(,4),(,8),...
+->(3,2),(7,6),...
+->(1,2),(5,6),...
+->(3,4),(7,8)...
+->(1,2),(3,4),(5,6),....
+-> possible when n is even
+*)
+
+let read_int () = Scanf.scanf " %d" (fun x->x);;
+let read_long () = Scanf.scanf " %Ld" (fun l->l);;
+let run_case = function
+| () ->
+     let n = read_long () in
+     let k = read_long () in
+     let remk = Int64.sub k (Int64.mul 4L (Int64.div k 4L)) in
+     if (remk=0L) then Printf.printf "NO\n"
+     else if (remk=2L) then begin
+         Printf.printf "YES\n";
+         let rec pairPrint = function
+         | x, r ->
+              if (x>n) then ()
+              else if (r=false) then begin
+                  Printf.printf "%Ld %Ld\n" x (Int64.succ x);
+                  pairPrint ((Int64.add x 2L), true)
+              end
+              else begin
+                  Printf.printf "%Ld %Ld\n" (Int64.succ x) x;
+                  pairPrint ((Int64.add x 2L), false)
+              end
+          in pairPrint (1L,true)
+     end
+     else begin
+         Printf.printf "YES\n";
+         let rec pairPrint =function
+         | x ->
+              if (x>n) then ()
+              else begin
+                  Printf.printf "%Ld %Ld\n" x (Int64.succ x);
+                  pairPrint (Int64.add x 2L)
+              end
+          in pairPrint 1L
+     end
+;;
+
+
+let rec iter_cases = function
+| 0 -> ()
+| t -> run_case (); iter_cases (t-1)
+;;
+
+let t = read_int () in iter_cases t;;
