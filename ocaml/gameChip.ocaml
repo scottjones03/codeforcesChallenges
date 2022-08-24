@@ -1,0 +1,34 @@
+(* 2n+1, 1 then second player wins 
+since 1st moves 2a-1, 2nd moves 2(n-a)+1, leaving 1,1 for first.
+
+2n,1 then first player wins since first moves 2n-1
+which leaves second with 1,1
+
+2n,2m then 2x+1,2m so second player wins.
+2n+1,2m then first moves 2m-1 leaving 2n+1,1 and that means
+first player wins as second player must go first in this grid type.
+
+2n+1,2m+1 then first player moves 2a-1 in either direction so
+second should move in that direction s.t 1,2m+1 or 2n+1,1 which means they win as the player that 
+needs to go seconds in the config wins.
+*)
+
+let read_long () = Scanf.scanf " %Ld" (fun l-> l);;
+let read_int () = Scanf.scanf " %d" (fun x-> x);;
+let run_case = function
+| () ->
+     let n = read_long () in
+     let m = read_long () in
+     let nrem = Int64.sub n (Int64.mul (Int64.div n 2L) 2L) in
+     let mrem = Int64.sub m (Int64.mul (Int64.div m 2L) 2L) in
+     if ((nrem=0L)&&(mrem=0L)) then print_string "Tonya"
+     else if ((nrem=0L)||(mrem=0L)) then print_string "Berenka"
+     else print_string "Tonya"
+;;
+
+let rec iter_cases = function
+| 0->()
+| t -> run_case (); print_newline (); iter_cases (t-1)
+;;
+
+let t=read_int () in iter_cases t;;
